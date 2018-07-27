@@ -6,6 +6,6 @@ import Login from './components/Login';
 export default(
     <Switch>
         <Route exact path='/' component={Login} />
-        <Route path='/search' component={Search}/>
+        <Route path='/dash' component={Search}/>
     </Switch>
 )

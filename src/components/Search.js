@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from '../logo.svg';
 import '../App.css';
 import axios from 'axios';
+import {getUser} from '../ducks/reducer';
+import {connect} from 'react-redux'
 
 class Search extends Component {
   constructor(){
@@ -10,6 +12,9 @@ class Search extends Component {
     this.state = {
       value: '',
     }
+  }
+  componentDidMount(){
+    this.props.getUser()    
   }
   handleInput(e){
     this.setState({
@@ -24,6 +29,7 @@ class Search extends Component {
   }
   render() {
     // console.log(process.env);
+    console.log(this.props.user);
     
     return (
       <div className="App">
@@ -37,5 +43,10 @@ class Search extends Component {
     );
   }
 }
+ function mapStateToProps(state){
+   return {
+     user: state.user
+   }
+ }
 
-export default Search;
+export default connect(mapStateToProps, {getUser})(Search);

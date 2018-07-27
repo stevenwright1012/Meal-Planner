@@ -5,21 +5,20 @@ const massive = require('massive');
 const session = require('express-session');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
-const cors = require('cors');
 const con = require('./controller');
 
 const {CONNECTION_URI, SESSION_SECRET, DOMAIN, CLIENT_ID, CLIENT_SECRET, CALLBACK_URL, SUCCESS_REDIRECT, FAILURE_REDIRECT} = process.env
 
 massive(CONNECTION_URI).then(db => {
     app.set('db', db)
+    
 })
 
+
 const app = express();
-
-
-
 app.use(bodyParser.json());
-app.use(cors());
+
+// app.use( express.static( `${__dirname}/../build` ) );
 
 app.use(session({
     secret: SESSION_SECRET,
@@ -59,20 +58,18 @@ passport.deserializeUser( (id, done) => {
     })
 })
 
-
-//-------------------Auth Endpoints ------------------------
+///// Auth endpoints//////
 app.get('/auth', passport.authenticate('auth0'))
 app.get('/auth/callback', passport.authenticate('auth0', {
     successRedirect: SUCCESS_REDIRECT,
     failureRedirect: FAILURE_REDIRECT
 }))
-
 app.get('/auth/me', (req, res) => {
     if(req.user){
         res.status(200).send(req.user);
     }
     else{
-        res.sendStatus(401)
+        res.sendStatus(401).send('NOPE!')
     }
 })
 app.get('/logout', (req, res) => {
